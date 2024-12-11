@@ -1,0 +1,27 @@
+{
+  "name": "api",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "dotenv -e .env.development vite",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --cache",
+    "build": "tsc && vite build"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.1",
+    "@fastify/type-provider-typebox": "^5.1.0",
+    "@prisma/client": "6.0.1",
+    "@sinclair/typebox": "^0.34.11",
+    "dotenv-cli": "^7.4.4",
+    "fastify": "^5.1.0",
+    "types": "workspace:*",
+    "utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.6.2",
+    "prisma": "^6.0.1",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.5",
+    "vite-plugin-node": "^3.0.2"
+  }
+}
