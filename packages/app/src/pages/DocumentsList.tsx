@@ -2,7 +2,7 @@ import { Document } from "../api/Document.ts";
 import { Link } from "react-router";
 import { Routes } from "../Routes.ts";
 
-export function Documents() {
+export function DocumentsList() {
   const { data: documents } = Document.useList()
   return (
     <>

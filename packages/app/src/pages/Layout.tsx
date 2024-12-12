@@ -1,16 +1,17 @@
-import { NavLink, Outlet } from "react-router";
+import { Outlet } from "react-router";
 import { Routes } from "../Routes.ts";
+import { NavItem } from "../components/NavItem.tsx";
 
 export function Layout() {
   return (
     <>
-      <nav>
-        <NavLink to={Routes.requirements()}>
+      <nav className="flex gap-2">
+        <NavItem to={Routes.requirements()}>
           Requirements
-        </NavLink>
-        <NavLink to={Routes.documents()}>
+        </NavItem>
+        <NavItem to={Routes.documents()}>
           Documents
-        </NavLink>
+        </NavItem>
       </nav>
       <Outlet/>
     </>

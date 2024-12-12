@@ -1,9 +1,9 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./api/queryClient.ts";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
-import { Requirements } from "./pages/Requirements.tsx";
-import { Documents } from "./pages/Documents.tsx";
-import { Document } from "./pages/Document.tsx";
+import { RequirementsList } from "./pages/RequirementsList.tsx";
+import { DocumentsList } from "./pages/DocumentsList.tsx";
+import { DocumentDetail } from "./pages/DocumentDetail.tsx";
 import { Layout } from "./pages/Layout.tsx";
 
 export function App() {
@@ -13,9 +13,9 @@ export function App() {
         <Routes>
           <Route element={<Layout/>}>
             <Route path="" element={<Navigate to="/requirements"/>} />
-            <Route path="requirements" element={<Requirements/>} />
-            <Route path="documents" element={<Documents/>} />
-            <Route path="documents/:id" element={<Document/>} />
+            <Route path="requirements" element={<RequirementsList/>} />
+            <Route path="documents" element={<DocumentsList/>} />
+            <Route path="documents/:id" element={<DocumentDetail/>} />
           </Route>
         </Routes>
       </BrowserRouter>

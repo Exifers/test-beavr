@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import axios from "axios";
 import * as Types from "types";
 
 export const Document = {
   useList() {
-    return useQuery({
+    return useSuspenseQuery({
       queryKey: ['documents'],
       queryFn: async () =>
         axios.get<Types.Documents>('/documents')
@@ -12,7 +12,7 @@ export const Document = {
     })
   },
   useRetrieve(id: string) {
-    return useQuery({
+    return useSuspenseQuery({
       queryKey: ['documents', id],
       queryFn: async () =>
         axios.get<Types.Document>(`/documents/${id}`)
