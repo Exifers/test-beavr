@@ -7,7 +7,7 @@ export const DocumentVersion = {
     const queryClient = useQueryClient()
     return useMutation( {
       mutationFn: async (data: Types.DocumentVersionCreatePayload) =>
-        axios.post('/documentVersions', { data })
+        axios.post('/documentVersions', data)
           .then(response => response.data),
       async onSuccess(_, variables) {
         await Promise.all([
@@ -21,7 +21,7 @@ export const DocumentVersion = {
     const queryClient = useQueryClient()
     return useMutation( {
       mutationFn: async ({ id, data }: { id: string, data: Types.DocumentVersionUpdatePayload}) =>
-        axios.put(`/documentVersions/${id}`, { data })
+        axios.put(`/documentVersions/${id}`, data)
           .then(response => response.data),
       async onSuccess(_, variables) {
         await Promise.all([
@@ -39,7 +39,7 @@ export const DocumentVersion = {
           .then(response => response.data),
       async onSuccess(_, id) {
         await Promise.all([
-          queryClient.invalidateQueries({queryKey: ['documents', id]}),
+          queryClient.invalidateQueries({queryKey: ['documents']}),
           queryClient.invalidateQueries({queryKey: ['requirements']})
         ])
       }

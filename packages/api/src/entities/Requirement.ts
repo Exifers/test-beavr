@@ -1,28 +1,30 @@
-import { DocumentVersionStatus } from "@prisma/client";
 import { db } from "../db.ts";
 import { Time } from "utils";
+import * as Types from 'types';
+import { Document } from "./Document.ts";
 
 export const Requirement = {
   async list() {
-    const today = Time.today()
-
-    return db.requirement.findMany({
+    const requirements = await db.requirement.findMany({
       include: {
         documents: {
           include: {
             documentVersions: true
-          },
-          where: {
-            documentVersions: {
-              some: {
-                status: DocumentVersionStatus.VALIDATED,
-                effectiveAt: { lte: today },
-                effectiveUntil: { gte: today },
-              }
-            }
           }
         }
       }
+    })
+
+    return requirements.map(requirement => {
+      const { documents, ...rest } = requirement
+      const documentVersions = documents
+        .map(document => document.documentVersions)
+        .flat()
+      const status = Document.calculateStatus(documentVersions)
+      return {
+        ...rest,
+        status,
+      } satisfies Types.Requirements[number]
     })
   }
 }

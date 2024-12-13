@@ -1,6 +1,5 @@
 import { Requirement } from "../api/Requirement.ts";
 
-
 export function RequirementsList() {
   const { data: requirements } = Requirement.useList()
   return (
@@ -12,7 +11,7 @@ export function RequirementsList() {
             key={requirement.id}
             {...requirement.description && { title: requirement.description }}
           >
-            {requirement.name}
+            {requirement.name} {requirement.status}
           </li>
         ))}
       </ul>

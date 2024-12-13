@@ -1,18 +1,20 @@
 import { db } from "../db.ts";
 import * as Types from "types";
 import { Range } from "utils";
+import { BadRequestError } from "../errors.ts";
+import { ErrorCode } from "types";
 
 export const DocumentVersion = {
   async create(data: Types.DocumentVersionCreatePayload) {
     await DocumentVersion.validate(data)
     return db.documentVersion.create({
-      data,
+      data
     });
   },
 
   async validate(data: Types.DocumentVersionCreatePayload | Types.DocumentVersionUpdatePayload, id?: string) {
     if (data.effectiveAt.getTime() > data.effectiveUntil.getTime())
-      throw new Error("effectiveAt must be before effectiveUntil")
+      throw new BadRequestError(ErrorCode.DOCUMENT_VERSION_DATES_END_BEFORE_START)
 
     const documentVersions = await db.documentVersion.findMany({
       where: {
@@ -25,7 +27,7 @@ export const DocumentVersion = {
       [documentVersion.effectiveAt.getTime(), documentVersion.effectiveUntil.getTime()],
       [data.effectiveAt.getTime(), data.effectiveUntil.getTime()]
     )))
-      throw new Error("dates overlap with another document version")
+      throw new BadRequestError(ErrorCode.DOCUMENT_VERSION_DATES_OVERLAP_OTHER_DOCUMENT_VERSION)
   },
 
   async update(id: string, data: Types.DocumentVersionUpdatePayload) {

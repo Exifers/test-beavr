@@ -48,7 +48,6 @@ module.exports = {
     "default-case-last": "error",
     eqeqeq: "error",
     "func-names": "error",
-    "func-style": ["error", "declaration"],
     "grouped-accessor-pairs": "error",
     "guard-for-in": "error",
     "logical-assignment-operators": "error",

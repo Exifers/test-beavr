@@ -1,4 +1,9 @@
-import { Type, type Static } from "@sinclair/typebox";
+import { type Static, Type } from "@sinclair/typebox";
+
+export enum ErrorCode {
+  DOCUMENT_VERSION_DATES_END_BEFORE_START = 'DOCUMENT_VERSION_DATES_END_BEFORE_START',
+  DOCUMENT_VERSION_DATES_OVERLAP_OTHER_DOCUMENT_VERSION = 'DOCUMENT_VERSION_DATES_OVERLAP_OTHER_DOCUMENT_VERSION'
+}
 
 export namespace Params {
   export const Id = Type.Object({
@@ -10,9 +15,10 @@ export const DocumentVersion = Type.Object({
   id: Type.String(),
   content: Type.String(),
   status: Type.Union([Type.Literal("DRAFT"), Type.Literal("VALIDATED")]),
-  effectiveAt: Type.Unsafe<Date>({ type: 'string', format: 'date' }),
-  effectiveUntil: Type.Unsafe<Date>({ type: 'string', format: 'date' }),
+  effectiveAt: Type.Unsafe<Date>({ type: 'string' }),
+  effectiveUntil: Type.Unsafe<Date>({ type: 'string' }),
 })
+export type DocumentVersion = Static<typeof DocumentVersion>
 
 export const DocumentVersionCreatePayload = Type.Composite([
   Type.Omit(DocumentVersion, ['id']),
@@ -32,23 +38,44 @@ export const DocumentVersionUpdatePayload = Type.Composite([
 
 export type DocumentVersionUpdatePayload = Static<typeof DocumentVersionUpdatePayload>
 
-export const Document = Type.Object({
-  id: Type.String(),
-  title: Type.String(),
-  description: Type.Union([Type.String(), Type.Null()]),
-  documentVersions: Type.Array(DocumentVersion)
-})
-export type Document = Static<typeof Document>
-
-export const Documents = Type.Array(Document)
-export type Documents = Static<typeof Documents>
+const Status = Type.Union([
+  Type.Literal('VALIDATED'),
+  Type.Literal('OUTDATED'),
+  Type.Literal('DRAFT'),
+  Type.Literal('MISSING'),
+])
 
 export const Requirement = Type.Object({
   id: Type.String(),
   name: Type.String(),
-  description: Type.Union([Type.String(), Type.Null()]),
-  documents: Type.Array(Document)
+  description: Type.Union([Type.String(), Type.Null()])
 })
 
-export const Requirements = Type.Array(Requirement)
+export const Requirements = Type.Array(
+  Type.Composite([
+    Requirement,
+    Type.Object({
+      status: Status,
+    })
+  ])
+)
 export type Requirements = Static<typeof Requirements>
+
+export const Document = Type.Object({
+  id: Type.String(),
+  title: Type.String(),
+  description: Type.Union([Type.String(), Type.Null()]),
+  documentVersions: Type.Array(DocumentVersion),
+  requirements: Type.Array(Requirement)
+})
+export type Document = Static<typeof Document>
+
+export const Documents = Type.Array(
+  Type.Composite([
+    Type.Omit(Document, ['requirements', 'documentVersions']),
+    Type.Object({
+      status: Status,
+    })
+  ])
+)
+export type Documents = Static<typeof Documents>

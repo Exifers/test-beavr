@@ -12,7 +12,7 @@ export function DocumentsList() {
           <li key={document.id}>
             <Link to={Routes.document({ id: document.id })}>
               {document.title}
-            </Link>
+            </Link> {document.status}
           </li>
         ))}
       </ul>
