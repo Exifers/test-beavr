@@ -37,23 +37,23 @@ export const Document = {
       return 'MISSING'
 
     const today = Time.today()
-    const currentDocumentVersions = documentVersions.filter(
+    const activeDocumentVersions = documentVersions.filter(
       documentVersion =>
         documentVersion.effectiveAt.getTime() <= today.getTime() &&
         today.getTime() <= documentVersion.effectiveUntil.getTime()
     )
-    if (!currentDocumentVersions.length) {
+    if (!activeDocumentVersions.length) {
       // TODO check if this is not due only to future versions
       return 'OUTDATED'
     }
 
-    const currentValidatedDocumentVersions = currentDocumentVersions
+    const currentValidatedDocumentVersions = activeDocumentVersions
       .filter(documentVersion => documentVersion.status === 'VALIDATED')
 
     if (currentValidatedDocumentVersions.length)
       return "VALIDATED"
 
-    const first = currentDocumentVersions[0]
+    const first = activeDocumentVersions[0]
     assert(first)
     assert(first.status === 'DRAFT')
     return 'DRAFT'
