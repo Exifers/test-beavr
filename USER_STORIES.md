@@ -15,6 +15,6 @@
 - ELSE, NECESSARILY the requirement is linked to a not active document version, THEN the status is "OUTDATED"
 
 **Navigation**
-- As a user, WHEN I come to the website, I see navbar with two items: requirements and documents
+- As a user, WHEN I come to the website, I see a navbar with two items: requirements and documents
 - As a user, WHEN I click on requirements, I am redirected to the requirements page
 - As a user, WHEN I click on documents, I am redirected to the documents page
