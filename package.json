@@ -4,6 +4,7 @@
   "scripts": {
     "gen": "plop",
     "dev": "pnpm --filter=* --stream run dev",
+    "migrate": "pnpm --filter=* --stream run migrate",
     "lint": "pnpm --filter=* --stream run lint",
     "typecheck": "pnpm --filter=* --stream run typecheck",
     "test": "pnpm --filter=* --stream run test",

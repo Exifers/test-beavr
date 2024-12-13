@@ -4,6 +4,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "dotenv -e .env.development vite",
+    "migrate": "prisma migrate dev",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --cache",
     "build": "tsc && vite build"
   },

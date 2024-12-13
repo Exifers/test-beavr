@@ -20,6 +20,9 @@ cp packages/api/.env.development packages/api/.env
 # Run docker compose
 docker compose up -d
 
+# Run migrations
+pnpm migrate
+
 # Launch the development servers
 pnpm dev
 ```
