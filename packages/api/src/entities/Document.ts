@@ -33,7 +33,7 @@ export const Document = {
   },
 
   calculateStatus(documentVersions: Types.DocumentVersion[]) {
-    let status: Types.Document['status']
+    let status: Types.Documents[number]['status']
     if (!documentVersions.length)
       status = 'MISSING'
     else {

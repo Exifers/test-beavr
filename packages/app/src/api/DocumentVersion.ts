@@ -23,9 +23,9 @@ export const DocumentVersion = {
       mutationFn: async ({ id, data }: { id: string, data: Types.DocumentVersionUpdatePayload}) =>
         axios.put(`/documentVersions/${id}`, data)
           .then(response => response.data),
-      async onSuccess(_, variables) {
+      async onSuccess() {
         await Promise.all([
-          queryClient.invalidateQueries({queryKey: ['documents', variables.data.documentId]}),
+          queryClient.invalidateQueries({queryKey: ['documents']}),
           queryClient.invalidateQueries({queryKey: ['requirements']}),
         ])
       }
@@ -37,7 +37,7 @@ export const DocumentVersion = {
       mutationFn: async (id: string) =>
         axios.delete(`/documentVersions/${id}`)
           .then(response => response.data),
-      async onSuccess(_, id) {
+      async onSuccess() {
         await Promise.all([
           queryClient.invalidateQueries({queryKey: ['documents']}),
           queryClient.invalidateQueries({queryKey: ['requirements']})

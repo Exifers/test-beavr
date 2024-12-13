@@ -66,7 +66,7 @@ export function DocumentDetail() {
               <div className="flex gap-2">
                 {documentVersion.status === 'DRAFT' ? <u className="cursor-pointer">Approve</u> : null}
                 {documentVersion.status === 'VALIDATED' ? <u className="cursor-pointer">Unapprove</u> : null}
-                <u className="cursor-pointer">Edit</u>
+                <EditDocumentVersionButton documentVersion={documentVersion} />
                 <DeleteDocumentVersionButton documentVersion={documentVersion} />
               </div>
             </li>
@@ -113,6 +113,48 @@ function DeleteDocumentVersionButton({ documentVersion }: DeleteDocumentVersionB
         setOpen(true)
       }}>Delete</u>
     </>
+  )
+}
+
+interface EditDocumentVersionButton {
+  documentVersion: Types.DocumentVersion
+}
+
+function EditDocumentVersionButton({ documentVersion }: EditDocumentVersionButton) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <EditDocumentVersionDrawer open={open} setOpen={setOpen} documentVersion={documentVersion} />
+      <u className="cursor-pointer" onClick={() => {setOpen(true)}}>Edit</u>
+    </>
+  )
+}
+
+interface EditDocumentVersionDrawerProps {
+  open: boolean
+  setOpen: (open: boolean) => void
+  documentVersion: Types.DocumentVersion
+}
+
+function EditDocumentVersionDrawer({ open, setOpen, documentVersion }: EditDocumentVersionDrawerProps) {
+  const { mutateAsync: updateDocumentVersion } = DocumentVersion.useUpdate()
+  const documentId = useDocumentId()
+  return (
+    <Drawer title="Update version" open={open} setOpen={setOpen}>
+      <DocumentVersionForm
+        initialValues={documentVersion}
+        onSubmit={async (data) => {
+          await updateDocumentVersion({
+            data: {
+              documentId,
+              ...documentVersion,
+              ...data,
+            },
+            id: documentVersion.id,
+          })
+          setOpen(false)
+        }}/>
+    </Drawer>
   )
 }
 
