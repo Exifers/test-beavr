@@ -1,5 +1,5 @@
 import { db } from "../db.ts";
-import { Time } from "utils";
+import { Time, assert } from "utils";
 import * as Types from 'types'
 
 export const Document = {
@@ -32,32 +32,30 @@ export const Document = {
     })
   },
 
-  calculateStatus(documentVersions: Types.DocumentVersion[]) {
-    let status: Types.Documents[number]['status']
+  calculateStatus(documentVersions: Types.DocumentVersion[]): Types.Documents[number]['status'] {
     if (!documentVersions.length)
-      status = 'MISSING'
-    else {
-      const today = Time.today()
-      const currentDocumentVersion = documentVersions.find(
-        documentVersion =>
-          documentVersion.effectiveAt.getTime() <= today.getTime() &&
-          today.getTime() <= documentVersion.effectiveUntil.getTime()
-      )
-      if (!currentDocumentVersion) {
-        // TODO check if this is not due only to future versions
-        status = 'OUTDATED'
-      }
-      else {
-        switch (currentDocumentVersion.status) {
-          case "DRAFT":
-            status = 'DRAFT'
-            break
-          case "VALIDATED":
-            status = 'VALIDATED'
-            break
-        }
-      }
+      return 'MISSING'
+
+    const today = Time.today()
+    const currentDocumentVersions = documentVersions.filter(
+      documentVersion =>
+        documentVersion.effectiveAt.getTime() <= today.getTime() &&
+        today.getTime() <= documentVersion.effectiveUntil.getTime()
+    )
+    if (!currentDocumentVersions.length) {
+      // TODO check if this is not due only to future versions
+      return 'OUTDATED'
     }
-    return status
+
+    const currentValidatedDocumentVersions = currentDocumentVersions
+      .filter(documentVersion => documentVersion.status === 'VALIDATED')
+
+    if (currentValidatedDocumentVersions.length)
+      return "VALIDATED"
+
+    const first = currentDocumentVersions[0]
+    assert(first)
+    assert(first.status === 'DRAFT')
+    return 'DRAFT'
   }
 }

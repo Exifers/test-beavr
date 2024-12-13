@@ -1,5 +1,5 @@
 
-export function assert(value: unknown): asserts value {
+export function assert(value: unknown, message?: string): asserts value {
   if (!value)
-    throw new Error("Assertion Error")
+    throw new Error(["Assertion Error", message].filter(Boolean).join(': '))
 }

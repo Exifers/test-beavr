@@ -64,8 +64,8 @@ export function DocumentDetail() {
                 </div>
               </div>
               <div className="flex gap-2">
-                {documentVersion.status === 'DRAFT' ? <u className="cursor-pointer">Approve</u> : null}
-                {documentVersion.status === 'VALIDATED' ? <u className="cursor-pointer">Unapprove</u> : null}
+                {documentVersion.status === 'DRAFT' ? <ApproveDocumentVersionButton documentVersion={documentVersion} /> : null}
+                {/* TODO unapprove */}
                 <EditDocumentVersionButton documentVersion={documentVersion} />
                 <DeleteDocumentVersionButton documentVersion={documentVersion} />
               </div>
@@ -145,6 +145,7 @@ function EditDocumentVersionDrawer({ open, setOpen, documentVersion }: EditDocum
         initialValues={documentVersion}
         onSubmit={async (data) => {
           await updateDocumentVersion({
+            // TODO convert PUT into PATCH to simplify
             data: {
               documentId,
               ...documentVersion,
@@ -155,6 +156,48 @@ function EditDocumentVersionDrawer({ open, setOpen, documentVersion }: EditDocum
           setOpen(false)
         }}/>
     </Drawer>
+  )
+}
+
+interface ApproveDocumentVersionButtonProps {
+  documentVersion: Types.DocumentVersion
+}
+
+function ApproveDocumentVersionButton({ documentVersion }: ApproveDocumentVersionButtonProps) {
+  const [open, setOpen] = useState(false)
+  const { mutateAsync: updateDocumentVersion } = DocumentVersion.useUpdate()
+  const documentId = useDocumentId()
+  return (
+    <>
+      <u className="cursor-pointer" onClick={() => {
+        setOpen(true)
+      }}>Approve</u>
+      <Modal title="Approve version" open={open} setOpen={setOpen}>
+        <pre>
+        <code>
+          {documentVersion.content}
+        </code>
+        </pre>
+        <div className="flex justify-end gap-2">
+          <button type="button" className="m-0" onClick={() => { setOpen(false) }}>
+            Cancel
+          </button>
+          <button type="button" className="m-0" onClick={async () => {
+            // TODO convert PUT into PATCH to simplify
+            await updateDocumentVersion({
+              data: {
+                documentId,
+                ...documentVersion,
+                status: 'VALIDATED'
+              },
+              id: documentVersion.id,
+            })
+            setOpen(false)
+          }}>Approve
+          </button>
+        </div>
+      </Modal>
+    </>
   )
 }
 
