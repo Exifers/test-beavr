@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- node >= 18
-- pnpm >= 8
+- node >= 22.8.0
+- pnpm >= 9.15.0
 - docker >= 24
 
 ## How to run?

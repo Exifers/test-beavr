@@ -6,7 +6,7 @@ export function RequirementsList() {
     <>
       <h2>Requirements</h2>
       <ul>
-        {requirements?.map(requirement => (
+        {requirements.map(requirement => (
           <li
             key={requirement.id}
             {...requirement.description && { title: requirement.description }}

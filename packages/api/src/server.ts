@@ -23,7 +23,8 @@ server.addHook('preHandler', async (request) => {
 })
 
 await server.register(cors, {
-  origin: '*'
+  // TODO restrict origin based on isomorphic config package
+  origin: '*',
 })
 
 
